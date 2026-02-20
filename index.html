@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechVision Syndicate | Mission 1000</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyberGreen: '#00ff41',
+                        cyberBlack: '#0a0a0a',
+                        cyberGray: '#1a1a1a',
+                    },
+                    fontFamily: {
+                        mono: ['"Fira Code"', '"Courier New"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Matrix Background Canvas */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        /* Custom Cyberpunk Navbar */
+        .cyber-nav {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff41;
+            box-shadow: 0 4px 30px rgba(0, 255, 65, 0.1);
+        }
+
+        /* Cyberpunk Button */
+        .btn-cyber {
+            position: relative;
+            background: transparent;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 10px 24px;
+            font-family: 'Fira Code', monospace;
+            text-transform: uppercase;
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        .btn-cyber:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 15px #00ff41;
+        }
+
+        /* Futuristic Team Cards */
+        .team-card {
+            background: linear-gradient(145deg, #111, #0a0a0a);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .team-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: -5px 10px 30px rgba(0, 255, 65, 0.15);
+        }
+
+        /* Glitch Title */
+        .glitch-text {
+            position: relative;
+            color: white;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050505;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 red;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 blue;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(20% 0 80% 0); }
+            20% { clip-path: inset(60% 0 10% 0); }
+            40% { clip-path: inset(40% 0 50% 0); }
+            60% { clip-path: inset(80% 0 5% 0); }
+            80% { clip-path: inset(10% 0 70% 0); }
+            100% { clip-path: inset(30% 0 50% 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(10% 0 60% 0); }
+            20% { clip-path: inset(30% 0 20% 0); }
+            40% { clip-path: inset(70% 0 10% 0); }
+            60% { clip-path: inset(20% 0 50% 0); }
+            80% { clip-path: inset(50% 0 30% 0); }
+            100% { clip-path: inset(5% 0 80% 0); }
+        }
+
+        /* Custom Input Fields */
+        .cyber-input {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            color: #00ff41;
+            transition: all 0.3s ease;
+        }
+        .cyber-input:focus {
+            outline: none;
+            border-color: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans relative">
+
+    <div class="hidden border-red-500 border-blue-500 border-purple-500 border-cyberGreen border-yellow-500 border-teal-500 border-sky-500 border-orange-500 border-pink-500 border-gray-400"></div>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <nav class="fixed top-0 w-full z-50 cyber-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-mono text-2xl font-bold text-white tracking-widest flex items-center gap-2" data-aos="fade-right">
+                <span class="text-cyberGreen">/></span> TECHVISION
+            </div>
+            
+            <div class="hidden md:flex space-x-8 items-center font-mono text-sm" data-aos="fade-left">
+                <a href="#mission" class="hover:text-cyberGreen transition">01. MISSION</a>
+                <a href="#compensation" class="hover:text-yellow-400 transition text-yellow-500">02. REWARDS</a>
+                <a href="#idcard" class="hover:text-yellow-400 transition text-yellow-500">03. ID CARD</a>
+                <a href="#squads" class="hover:text-cyberGreen transition">04. SQUADS</a>
+                <a href="#roadmap" class="hover:text-cyberGreen transition">05. ROADMAP</a>
+                <a href="#q&a" class="hover:text-cyberGreen transition">06. q&a</a>
+                <a href="#rules" class="hover:text-cyberGreen transition">RULES⚠️</a>
+                <a href="#join" class="btn-cyber">INITIALIZE</a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-cyberGreen focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-cyberBlack border-b border-cyberGreen/50 font-mono">
+            <a href="#mission" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800">01. MISSION</a>
+            <a href="#compensation" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800 text-yellow-500">02. REWARDS</a>
+            <a href="#squads" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800">03. SQUADS</a>
+            <a href="#roadmap" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800">04. ROADMAP</a>
+            
+            <a href="#join" class="mobile-link block px-6 py-4 text-cyberGreen font-bold hover:bg-cyberGreen/10">INITIALIZE_SYSTEM</a>
+
+        </div>
+    </nav>
+
+    <section id="mission" class="min-h-screen flex items-center pt-24 pb-12 px-6">
+        <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
+            <div class="z-10" data-aos="fade-right">
+                <div class="inline-block px-3 py-1 border border-cyberGreen/30 bg-cyberGreen/10 text-cyberGreen font-mono text-xs mb-6 rounded">
+                    STATUS: RECRUITING ACTIVE
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-mono">
+                    <span class="glitch-text" data-text="OPERATION">OPERATION</span><br/>
+                    <span class="text-cyberGreen">1000</span>
+                </h1>
+                <p id="typewriter-text" class="text-gray-400 text-lg mb-8 leading-relaxed max-w-lg min-h-[90px] font-mono"></p>
+                
+                <div class="flex flex-wrap gap-4 font-mono">
+                    <a href="#join" class="btn-cyber flex items-center gap-2">
+                        <span>APPLY NOW</span>
+                    </a>
+                    <a href="#compensation" class="px-6 py-3 text-yellow-500 hover:text-white transition underline underline-offset-4">
+                        View Compensation Package
+                    </a>
+                </div>
+            </div>
+            
+            <div class="z-10 bg-cyberGray/50 border border-gray-800 p-6 rounded-lg backdrop-blur-md font-mono hidden md:block" data-aos="fade-left" data-aos-delay="200">
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
+                    <span class="text-xs text-gray-400">SYSTEM_DIAGNOSTICS</span>
+                    <span class="w-2 h-2 bg-cyberGreen rounded-full animate-pulse"></span>
+                </div>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-500">Target Recruits:</span> <span class="text-white">1,000</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Training Duration:</span> <span class="text-white">24 Months</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Active Divisions:</span> <span class="text-white">10 Squads</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Cost:</span> <span class="text-cyberGreen">$0.00 (Fully Funded)</span></div>
+                    
+                    <div class="pt-4 mt-4 border-t border-gray-700">
+                        <span class="text-xs text-gray-500 block mb-1">Recruitment Progress [12%]</span>
+                        <div class="w-full bg-gray-900 h-1">
+                            <div class="bg-cyberGreen h-1 w-[12%] shadow-[0_0_10px_#00ff41]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="compensation" class="py-16 px-6 relative z-10 bg-black">
+        <div class="max-w-7xl mx-auto bg-gradient-to-br from-[#0a1a0f] to-cyberBlack border border-cyberGreen/50 p-8 md:p-12 rounded-lg shadow-[0_0_40px_rgba(0,255,65,0.15)] relative overflow-hidden" data-aos="zoom-in">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <svg class="w-32 h-32 text-cyberGreen" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            
+            <h2 class="text-3xl md:text-5xl font-mono font-bold text-white mb-8 border-b border-gray-800 pb-4">ELITE <span class="text-yellow-500">REWARDS & COMPENSATION</span></h2>
+            
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="border-l-4 border-yellow-500 pl-6 bg-yellow-500/5 p-4 rounded-r">
+                    <div class="text-yellow-500 font-mono text-sm mb-2">>_ POST_TRAINING_PACKAGE</div>
+                    <h3 class="text-3xl font-bold text-white mb-3">১ কোটি টাকার স্যালারি প্যাকেজ</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        প্রোগ্রাম শেষে যারা সফলভাবে বের হবে, তাদের পারফরম্যান্স ও স্কিলের ওপর ভিত্তি করে একটি হ্যান্ডসাম স্যালারি দেওয়া হবে, প্যাকেজ শুরু হবে <span class="text-yellow-500 font-bold">১ কোটি টাকা</span>। আপনার কাজ ও ডেডিকেশন নির্ধারণ করবে আপনার স্যালারি।
+                    </p>
+                </div>
+                
+                <div class="border-l-4 border-cyberGreen pl-6 bg-cyberGreen/5 p-4 rounded-r">
+                    <div class="text-cyberGreen font-mono text-sm mb-2">>_ TRAINING_ALLOWANCE</div>
+                    <h3 class="text-3xl font-bold text-white mb-3">৫০ হাজার থেকে ১ লাখ টাকা ভাতা</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        ট্রেনিং চলাকালীন সময়ে কাজের মূল্যায়ন করে প্রতিটি টিম থেকে টপ ১০ জন করে মোট <span class="text-cyberGreen font-bold">১০০ জন রিয়েল ট্যালেন্টকে</span> তাদের পারফরম্যান্স অনুযায়ী প্রতি মাসে ৫০ হাজার থেকে ১ লাখ টাকা পর্যন্ত বিশেষ ভাতা প্রদান করা হবে।
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section id="idcard" class="py-24 px-6 relative z-10 bg-[#030303] overflow-hidden">
+    
+    <div class="absolute top-0 right-0 w-96 h-96 bg-cyberGreen rounded-full blur-[180px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-900 rounded-full blur-[180px] opacity-5 pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+        
+        <div class="lg:w-1/2 flex justify-center perspective-1000" data-aos="fade-right">
+            
+            <div class="tech-bank-card w-[420px] h-[260px] rounded-3xl relative overflow-hidden transition-all duration-700 hover:rotate-y-6 hover:rotate-x-6 shadow-[0_25px_60px_rgba(0,0,0,0.7)] group cursor-pointer border-[1.5px] border-gray-800 hover:border-cyberGreen/60 z-20">
+                
+                <div class="absolute inset-0 bg-[#0a0a0a] z-0"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_-30%,rgba(0,255,65,0.15),transparent_60%)] z-0"></div>
+                
+                <div class="absolute inset-0 opacity-[0.08] z-0 pointer-events-none overflow-hidden">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <pattern id="circuit-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                            <path d="M10 10h30v30h-30z" fill="none" stroke="currentColor" stroke-width="0.5" class="text-cyberGreen"/>
+                            <path d="M25 10v30 M10 25h30" fill="none" stroke="currentColor" stroke-width="0.5" class="text-cyberGreen" opacity="0.5"/>
+                            <circle cx="25" cy="25" r="2" fill="currentColor" class="text-cyberGreen" opacity="0.3"/>
+                        </pattern>
+                        <rect x="0" y="0" width="100%" height="100%" fill="url(#circuit-pattern)"></rect>
+                    </svg>
+                </div>
+
+                <div class="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.4)_50%)] bg-[length:100%_4px] pointer-events-none z-10 opacity-30"></div>
+
+                <div class="relative z-20 h-full flex flex-col justify-between p-7 text-white">
+                    
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-sans text-xl font-black tracking-[0.2em] flex items-center gap-3 uppercase drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]">
+                                <div class="w-3 h-3 bg-cyberGreen rotate-45 animate-pulse"></div>
+                                HUNTER
+                            </div>
+                            <div class="text-[9px] font-mono text-cyberGreen/70 mt-2 uppercase tracking-[0.3em] flex items-center before:content-['['] before:mr-1 after:content-[']'] after:ml-1 before:text-gray-600 after:text-gray-600">Syndicate Access Pass</div>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -inset-2 bg-cyberGreen/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <svg class="w-8 h-8 text-gray-300 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20" class="text-cyberGreen"></path>
+                                <path d="M17 5S14 8 14 12s3 7 3 7" opacity="0.8"></path>
+                                <path d="M22 3s-4 4-4 9 4 9 4 9" opacity="0.6"></path>
+                                <path d="M7 5S10 8 10 12s-3 7-3 7" opacity="0.8"></path>
+                                <path d="M2 3s4 4 4 9-4 9-4 9" opacity="0.6"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-6 mt-2">
+                        <div class="relative w-16 h-12 shrink-0">
+                             <div class="absolute inset-0 bg-yellow-500/30 blur-md rounded-sm"></div>
+                            <svg class="w-full h-full relative z-10 drop-shadow-lg" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="64" height="48" rx="6" fill="url(#chip-gradient)" stroke="#A16207" stroke-width="1"/>
+                                <path d="M10 12H24V24H10V12Z" fill="#CA8A04"/>
+                                <path d="M10 26H24V38H10V26Z" fill="#CA8A04"/>
+                                <path d="M26 12H40V24H26V12Z" fill="#CA8A04"/>
+                                <path d="M26 26H40V38H26V26Z" fill="#CA8A04"/>
+                                <path d="M42 18H54V32H42V18Z" fill="#CA8A04"/>
+                                <path d="M8 18H56" stroke="#FBBF24" stroke-width="0.5" opacity="0.7"/>
+                                <path d="M8 32H56" stroke="#FBBF24" stroke-width="0.5" opacity="0.7"/>
+                                <path d="M25 10V40" stroke="#FBBF24" stroke-width="0.5" opacity="0.7"/>
+                                <path d="M41 10V40" stroke="#FBBF24" stroke-width="0.5" opacity="0.7"/>
+                                
+                                <defs>
+                                    <linearGradient id="chip-gradient" x1="0" y1="0" x2="64" y2="48" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#EAB308"/>
+                                        <stop offset="1" stop-color="#A16207"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        
+                        <div class="flex-1 relative">
+                             <div class="absolute -top-3 -left-2 text-[6px] text-cyberGreen/20 font-mono select-none pointer-events-none">
+                                01011010 11010010 10101011<br>
+                                11100010 10110101 00010101
+                            </div>
+                            <div class="font-mono text-3xl tracking-[0.25em] font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 flex items-baseline">
+                                <span class="text-gray-400 text-xl mr-2">></span>
+                                TVSY <span class="text-cyberGreen relative px-1">89FX<span class="absolute inset-0 bg-cyberGreen/20 blur-sm -z-10 animate-pulse"></span></span> 03
+                            </div>
+                            <div class="flex items-center gap-2 mt-2">
+                                <div class="h-[2px] w-6 bg-cyberGreen/50"></div>
+                                <div class="text-[8px] text-gray-400 font-mono uppercase tracking-widest">Unique Identification // Auth Code</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 flex justify-between items-end mt-4 border-t border-gray-800/60 pt-4 bg-black/20 -mx-7 px-7 pb-1 backdrop-blur-sm">
+                        <div>
+                            <div class="text-[8px] text-cyberGreen font-mono uppercase mb-1 tracking-widest flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                Ghost Alias
+                            </div>
+                            <div class="font-bold tracking-[0.2em] text-sm uppercase text-white drop-shadow-sm">CYPHER_NINE</div>
+                        </div>
+                        
+                        <div class="hidden sm:block opacity-40">
+                            <div class="flex items-end gap-[2px] h-8">
+                                <div class="w-1 h-full bg-gray-500"></div>
+                                <div class="w-[2px] h-2/3 bg-gray-500"></div>
+                                <div class="w-[3px] h-full bg-gray-500"></div>
+                                <div class="w-1 h-1/2 bg-gray-500"></div>
+                                <div class="w-[2px] h-full bg-gray-500"></div>
+                                <div class="w-1 h-3/4 bg-gray-500"></div>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <div class="text-[8px] text-gray-400 font-mono uppercase mb-1 tracking-widest flex items-center justify-end">
+                                Division & Role
+                                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.965 11.965 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            </div>
+                            <div class="font-bold text-xs text-cyberGreen tracking-[0.15em] uppercase bg-cyberGreen/10 px-2 py-1 rounded-sm border-l-2 border-cyberGreen">Red Team // Pentester</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-30 mix-blend-overlay"></div>
+            </div>
+            </div>
+        <div class="lg:w-1/2" data-aos="fade-left" data-aos-delay="200">
+            <div class="inline-block px-3 py-1 border border-yellow-500/30 bg-yellow-500/10 text-yellow-500 font-mono text-xs mb-4 rounded">
+                RESTRICTED: TEAM MEMBERS ONLY
+            </div>
+            <h2 class="text-3xl md:text-5xl font-mono font-bold text-white mb-6">THE <span class="text-cyberGreen relative">GHOST ID<span class="absolute bottom-0 left-0 w-full h-1 bg-cyberGreen/30 blur-sm"></span></span> REWARDS</h2>
+            <p class="text-gray-400 leading-relaxed mb-8 font-mono text-sm">
+                এই প্রফেশনাল টেক-ব্যাংক কার্ডটি সম্পূর্ণ এক্সক্লুসিভ এবং এটি শুধুমাত্র আমাদের নির্বাচিত স্পেশালিস্ট টিম মেম্বারদের প্রদান করা হবে। এটি শুধু একটি পরিচয়পত্র নয়, এটি আপনার প্রিমিয়াম ফেসিলিটি এবং সিক্রেট রিওয়ার্ড আনলক করার চাবিকাঠি।
+            </p>
+            
+            <div class="space-y-6">
+                <div class="flex items-start gap-4 p-4 bg-gray-900/50 border border-gray-800 rounded-lg hover:border-cyberGreen/30 transition-colors group">
+                    <div class="p-3 bg-cyberGreen/10 rounded-md text-cyberGreen group-hover:bg-cyberGreen/20 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-1 font-mono">স্পেশাল <span class="text-cyberGreen">**50%**</span> ডিসকাউন্ট কুপন</h4>
+                        <p class="text-gray-400 text-sm font-mono">কার্ডের ওপর থাকা ইউনিক ১৬-ডিজিটের আইডি নাম্বারটি কুপন কোড হিসেবে ব্যবহার করে আমাদের পার্টনার টেক-শপ ও গ্যাজেট স্টোর থেকে যেকোনো কেনাকাটায় সরাসরি **50%** ডিসকাউন্ট পাওয়া যাবে।</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 bg-gray-900/50 border border-gray-800 rounded-lg hover:border-yellow-500/30 transition-colors group">
+                    <div class="p-3 bg-yellow-500/10 rounded-md text-yellow-500 group-hover:bg-yellow-500/20 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-1 font-mono">ভিআইপি শপিং ফেসিলিটি ও অ্যাক্সেস</h4>
+                        <p class="text-gray-400 text-sm font-mono">যেকোনো টেক ইভেন্ট, ওয়ার্কশপ, বা সেমিনারে এই কার্ড প্রদর্শন করে ফ্রি এবং ভিআইপি এন্ট্রি। এছাড়া গ্যাজেট কেনাকাটায় পাবেন ফার্স্ট-প্রায়োরিটি ডেলিভারি ও সার্ভিসিং।</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 p-4 bg-gray-900/50 border border-gray-800 rounded-lg hover:border-blue-500/30 transition-colors group">
+                    <div class="p-3 bg-blue-500/10 rounded-md text-blue-500 group-hover:bg-blue-500/20 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.965 11.965 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-1 font-mono">এনএফসি স্ক্যান ও টিম আইডেন্টিটি</h4>
+                        <p class="text-gray-400 text-sm font-mono">কার্ডের বিল্ট-ইন চিপ এবং এনএফসি (NFC) পাঞ্চ করে সিস্টেমে আপনার গোস্ট আইডেন্টিটি এবং টিম পজিশন ভেরিফাই করতে পারবেন কোনো ছবি বা আসল নাম ছাড়াই।</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        /* Reduced rotation angles for a more solid feel */
+        .hover\:rotate-y-6:hover {
+            transform: rotateY(6deg);
+        }
+        .hover\:rotate-x-6:hover {
+            transform: rotateX(6deg);
+        }
+    </style>
+</section>
+
+
+
+    <section id="squads" class="py-24 px-6 relative z-10 bg-gradient-to-b from-transparent to-cyberBlack">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 md:flex justify-between items-end" data-aos="fade-up">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-mono font-bold text-white mb-4">TACTICAL <span class="text-cyberGreen">DIVISIONS</span></h2>
+                    <p class="text-gray-400 max-w-2xl">প্রতিটি টিমে ১০০ জন করে স্পেশালিস্ট। প্রতিটি টিমের কাজের ক্ষেত্র সম্পূর্ণ আলাদা এবং ইউনিক।</p>
+                </div>
+                <div class="font-mono text-cyberGreen mt-6 md:mt-0 text-right">
+                    TOTAL CAPACITY: 1000/1000
+                </div>
+            </div>
+            
+            <div id="team-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="py-24 px-6 relative z-10 bg-cyberBlack border-t border-gray-900">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-mono font-bold text-center text-white mb-16" data-aos="fade-up">TRAINING <span class="text-cyberGreen">ROADMAP</span></h2>
+            
+            <div class="relative border-l-2 border-gray-800 ml-4 md:ml-0 font-mono">
+                <div class="mb-12 ml-8 relative" data-aos="fade-up">
+                    <div class="absolute -left-[41px] top-1 w-5 h-5 bg-cyberBlack border-2 border-cyberGreen rounded-full shadow-[0_0_10px_#00ff41]"></div>
+                    <h3 class="text-xl font-bold text-cyberGreen">PHASE 01: FOUNDATION (Months 1-6)</h3>
+                    <p class="text-gray-400 mt-2">লীনাক্স, নেটওয়ার্কিং, পাইথন স্ক্রিপ্টিং এবং সাইবার সিকিউরিটির বেসিক কনসেপ্ট ক্লিয়ার করা।</p>
+                </div>
+                <div class="mb-12 ml-8 relative" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute -left-[41px] top-1 w-5 h-5 bg-cyberBlack border-2 border-blue-500 rounded-full"></div>
+                    <h3 class="text-xl font-bold text-blue-500">PHASE 02: SPECIALIZATION (Months 7-12)</h3>
+                    <p class="text-gray-400 mt-2">স্কোয়াড অনুযায়ী আলাদা আলাদা স্পেশালাইজড ট্রেনিং শুরু। রেড, ব্লু এবং অন্যান্য টিমের কোর কাজ শেখা।</p>
+                </div>
+                <div class="mb-12 ml-8 relative" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute -left-[41px] top-1 w-5 h-5 bg-cyberBlack border-2 border-purple-500 rounded-full"></div>
+                    <h3 class="text-xl font-bold text-purple-500">PHASE 03: SIMULATION (Months 13-18)</h3>
+                    <p class="text-gray-400 mt-2">রিয়েল-ওয়ার্ল্ড হ্যাকিং ল্যাব, সিটিএফ (CTF) টুর্নামেন্ট এবং লাইভ প্রজেক্টে এটাক ও ডিফেন্স প্র্যাকটিস।</p>
+                </div>
+                <div class="ml-8 relative" data-aos="fade-up" data-aos-delay="300">
+                    <div class="absolute -left-[41px] top-1 w-5 h-5 bg-cyberBlack border-2 border-red-500 rounded-full"></div>
+                    <h3 class="text-xl font-bold text-red-500">PHASE 04: EXECUTION (Months 19-24)</h3>
+                    <p class="text-gray-400 mt-2">বাগ বাউন্টি, গ্লোবাল সিকিউরিটি অডিট এবং মিশন কমপ্লিশন অ্যাসেসমেন্ট।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+  
+  <section id="q&a" class="py-24 px-6 relative z-10 bg-[#050505] border-t border-gray-900/50">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyberGreen rounded-full blur-[200px] opacity-[0.03] pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto relative">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-block px-3 py-1 border border-gray-800 bg-gray-900/50 text-gray-400 font-mono text-xs mb-4 rounded">
+                SYSTEM_QUERY // USER_MANUAL
+            </div>
+            <h2 class="text-3xl md:text-5xl font-mono font-bold text-white">COMMON <span class="text-cyberGreen glitch-text" data-text="QUERIES">QUERIES</span></h2>
+        </div>
+
+        <div class="space-y-4 font-mono">
+            
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="100">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">এই ট্রেনিং প্রোগ্রামে জয়েন করতে কি কোনো ফি দিতে হবে?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> না, এটি সম্পূর্ণ ফান্ডেড একটি মিশন। রিয়েল ট্যালেন্টদের খুঁজে বের করাই আমাদের লক্ষ্য। উল্টো পারফরম্যান্স ভালো হলে প্রতি মাসে ৫০ হাজার থেকে ১ লাখ টাকা পর্যন্ত ট্রেনিং ভাতা দেওয়া হবে।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="200">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">কারা এই মিশনে অংশ নিতে পারবে? শিক্ষাগত যোগ্যতা কী লাগবে?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> প্রযুক্তি ও সাইবার সিকিউরিটির প্রতি তীব্র প্যাশন আছে এমন যে কেউই আবেদন করতে পারবেন। আমাদের কাছে সার্টিফিকেটের চেয়ে আপনার লজিক্যাল থিঙ্কিং এবং প্রবলেম সলভিং স্কিল বেশি গুরুত্বপূর্ণ।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="300">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">১ কোটি টাকার স্যালারি প্যাকেজ কি সবার জন্য?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> যারা ২৪ মাসের এই কঠোর ট্রেনিং সফলভাবে শেষ করবে এবং টপ পারফর্মার হিসেবে নিজেদের প্রমাণ করবে, শুধুমাত্র সেই এলিট মেম্বারদেরই ১ কোটি টাকার স্টার্টিং স্যালারি প্যাকেজ অফার করা হবে।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="400">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">Ghost ID Card কবে প্রদান করা হবে?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> সিলেকশন প্রসেস শেষ হওয়ার পর এবং ইনিশিয়াল বুটক্যাম্প (Phase 01) পার করার পর অফিশিয়ালি এই NFC-এনাবলড Ghost ID Card মেম্বারদের প্রদান করা হবে।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="500">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">কীভাবে আবেদন করব এবং সিলেকশন প্রসেস কী?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> উপরের 'INITIALIZE' বাটনে ক্লিক করে ফর্ম সাবমিট করতে হবে। এরপর একটি অনলাইন বেসিক অ্যাপটিটিউড (Aptitude) ও লজিক টেস্ট হবে। সেখানে কোয়ালিফাই করলে একটি ফেস-টু-ফেস ভাইভা বা সাইকোলজিক্যাল অ্যাসেসমেন্ট নেওয়া হবে। সব রাউন্ড পার করলেই আপনি 'Mission 1000'-এ জায়গা পাবেন।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="600">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">এই ট্রেনিং কি অনলাইনে হবে নাকি ফিজিক্যালি উপস্থিত থাকতে হবে?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> এটি একটি হাইব্রিড মডেলের ট্রেনিং। Foundation Phase (প্রথম ৬ মাস) অনলাইনে করা যাবে। কিন্তু Specialization এবং Simulation ফেজে আমাদের নিজস্ব ল্যাব বা হেডকোয়ার্টারে ফিজিক্যালি উপস্থিত থেকে প্রজেক্ট এবং লাইভ অ্যাটাকে অংশ নিতে হবে।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="700">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">পড়াশোনা বা অন্য চাকরির পাশাপাশি কি এই মিশনে অংশ নেওয়া সম্ভব?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> এটি একটি অত্যন্ত ইনটেনসিভ (Intensive) ফুল-টাইম বুটক্যাম্প। এখানে আপনাকে প্রতিদিন প্রচুর সময় (প্রায় ৮-১০ ঘণ্টা) ডেডিকেট করতে হবে। তাই অন্য কোনো ফুল-টাইম চাকরি বা ভারী অ্যাকাডেমিক চাপের সাথে এটি চালিয়ে নেওয়া প্রায় অসম্ভব।
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item border border-gray-800 bg-[#0a0a0a] rounded-sm overflow-hidden transition-all duration-300 hover:border-cyberGreen/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.05)]" data-aos="fade-up" data-aos-delay="800">
+                <button class="faq-button w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-cyberGreen group-hover:animate-pulse">>_</span>
+                        <h3 class="text-white text-sm md:text-base font-bold tracking-wide">এর জন্য কি হাই-এন্ড পিসি বা ল্যাপটপ থাকা বাধ্যতামূলক?</h3>
+                    </div>
+                    <div class="text-cyberGreen text-xl font-bold faq-icon transition-transform duration-300">+</div>
+                </button>
+                <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 bg-black/50">
+                    <div class="px-6 pb-6 pt-2 text-gray-400 text-sm leading-relaxed border-t border-gray-800/50 mx-6">
+                        <span class="text-yellow-500 mr-2">RESPONSE:</span> শুরুর দিকে কাজ শেখার জন্য একটি বেসিক কনফিগারেশনের ল্যাপটপ বা ডেস্কটপ (কমপক্ষে 8GB RAM, Core i5/Ryzen 5 সমতুল্য প্রসেসর) থাকলেই চলবে। অ্যাডভান্সড হ্যাকিং ল্যাব বা ভারী সিমুলেশনের জন্য আমরা স্পেশাল ক্লাউড সার্ভার অ্যাক্সেস প্রোভাইড করব।
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<script>
+    // FAQ Accordion Logic
+    document.addEventListener("DOMContentLoaded", () => {
+        const faqButtons = document.querySelectorAll('.faq-button');
+
+        faqButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('.faq-icon');
+                
+                // Check if currently active
+                const isActive = button.classList.contains('active');
+
+                // Close all other FAQs (Optional: Remove this block if you want multiple open at once)
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.style.maxHeight = null;
+                });
+                document.querySelectorAll('.faq-button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.querySelector('.faq-icon').textContent = '+';
+                    btn.parentElement.classList.remove('border-cyberGreen/50');
+                });
+
+                // Toggle current FAQ
+                if (!isActive) {
+                    button.classList.add('active');
+                    icon.textContent = '−';
+                    button.parentElement.classList.add('border-cyberGreen/50');
+                    // Calculate and set max-height for smooth transition
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+    });
+</script>      
+
+  <!-- SECRET WARNING SECTION -->
+<section id="rules" class="relative bg-gradient-to-br from-black via-gray-900 to-black text-white py-24 px-6 overflow-hidden">
+
+    <!-- Glow Effects -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-red-500 opacity-10 blur-[180px] rounded-full"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-green-500 opacity-10 blur-[180px] rounded-full"></div>
+
+    <div class="max-w-5xl mx-auto relative z-10">
+
+        <!-- Header -->
+        <div class="text-center mb-14">
+            <h2 class="text-4xl md:text-5xl font-bold text-red-500 tracking-wide animate-pulse">
+                ⚠️ সতর্কবার্তা – সিক্রেট মিশন
+            </h2>
+            <p class="text-gray-300 mt-4 text-lg">
+                এই প্ল্যাটফর্ম শুধুমাত্র নৈতিক সাইবার সিকিউরিটি গবেষণার জন্য।  
+                আপনি কি সত্যিই এই দায়িত্ব নেওয়ার জন্য প্রস্তুত?
+            </p>
+        </div>
+
+        <!-- Main Box -->
+        <div class="bg-[#111827] border border-red-500/30 rounded-2xl p-10 shadow-2xl space-y-10">
+
+            <!-- Questions Section -->
+            <div>
+                <h3 class="text-2xl font-bold text-yellow-400 mb-6">
+                     বাধ্যতামূলক শর্তাবলি:
+                </h3>
+
+                <ul class="space-y-4 text-gray-200 text-lg">
+                    <li class="bg-gray-800 p-4 rounded-xl border-l-4 border-red-500">
+                        ⚠️ আমাদের টিম লিডার এর সিদ্ধান্ত চূড়ান্ত সিদ্ধান্ত। 
+                    </li>
+                    <li class="bg-gray-800 p-4 rounded-xl border-l-4 border-blue-500">
+                        ⚠️ আপনি কি কোনো রাজনৈতিক কার্যক্রমে যুক্ত তাকতে পারবেন নাহ।
+                    </li>
+                    <li class="bg-gray-800 p-4 rounded-xl border-l-4 border-green-500">
+                        ⚠️ দেশকে ভালোবাসবেন এবং দেশের ক্ষতি করবেন না।
+                    </li>
+                    <li class="bg-gray-800 p-4 rounded-xl border-l-4 border-purple-500">
+                        ⚠️ মিশনের গোপনীয়তা রক্ষা করতে হবে। 
+                    </li>
+                    <li class="bg-gray-800 p-4 rounded-xl border-l-4 border-yellow-500">
+                        ⚠️ কাজের সময় ব্যাক্তি সার্ত বা দায় বার দেখা জাবে না । 
+                    </li>
+                </ul>
+            </div>
+
+            <!-- System Requirements -->
+            <div>
+                <h3 class="text-2xl font-bold text-green-400 mb-6">
+                    💻 ন্যূনতম সিস্টেম প্রয়োজনীয়তা
+                </h3>
+
+                <div class="grid md:grid-cols-2 gap-6 text-gray-200">
+                    <div class="bg-gray-800 p-5 rounded-xl border border-green-500/40">
+                        ✔ ন্যূনতম ৪GB RAM (৮GB সুপারিশকৃত)
+                    </div>
+                    <div class="bg-gray-800 p-5 rounded-xl border border-blue-500/40">
+                        ✔ Intel i3 / Ryzen 3 বা তার উপরে
+                    </div>
+                    <div class="bg-gray-800 p-5 rounded-xl border border-purple-500/40">
+                        ✔ কমপক্ষে ১০০GB ফ্রি স্টোরেজ
+                    </div>
+                    <div class="bg-gray-800 p-5 rounded-xl border border-yellow-500/40">
+                        ✔ স্থিতিশীল ইন্টারনেট সংযোগ
+                    </div>
+                    <div class="bg-gray-800 p-5 rounded-xl border border-red-500/40 md:col-span-2">
+                        ✔ Linux বা Windows 10+ সুপারিশকৃত
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agreement -->
+            <div class="mt-10 text-center">
+                <div class="flex items-center justify-center gap-3 mb-6">
+                    <input type="checkbox" id="agreeCheck"
+                        class="w-6 h-6 accent-green-500">
+                    <label for="agreeCheck" class="text-lg text-gray-300">
+                        আমি উপরোক্ত সকল নিয়ম মেনে চলতে সম্মত এবং এই মিশন গোপন রাখবো।
+                    </label>
+                </div>
+
+                <button id="acceptBtn"
+                    class="px-10 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105 transition duration-300 rounded-xl text-black font-bold text-lg shadow-lg disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled>
+                    🚀 সম্মতি প্রদান করুন
+                </button>
+
+                <p id="successMsg" class="hidden mt-6 text-green-400 font-bold text-xl animate-pulse">
+                    ✅ প্রবেশ অনুমোদিত – স্বাগতম যোদ্ধা।
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const agreeCheck = document.getElementById("agreeCheck");
+    const acceptBtn = document.getElementById("acceptBtn");
+    const successMsg = document.getElementById("successMsg");
+
+    agreeCheck.addEventListener("change", function () {
+        acceptBtn.disabled = !this.checked;
+    });
+
+    acceptBtn.addEventListener("click", function () {
+        successMsg.classList.remove("hidden");
+        acceptBtn.innerText = "✔ সম্মতি সম্পন্ন";
+        acceptBtn.classList.add("bg-green-700");
+    });
+</script>  
+
+    <section id="join" class="py-24 px-6 relative z-10 bg-gradient-to-t from-[#050505] to-cyberBlack">
+        <div class="max-w-4xl mx-auto bg-[#0a0a0a] border border-cyberGreen/30 p-8 md:p-12 rounded shadow-[0_0_30px_rgba(0,255,65,0.05)]" data-aos="zoom-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-mono font-bold text-white mb-2">INITIALIZE_<span class="text-cyberGreen">SYSTEM</span></h2>
+                <p class="text-gray-500 font-mono text-sm">Fill the form to request beta access to the training protocol.</p>
+            </div>
+
+            <div class="bg-red-900/20 border border-red-500/50 p-4 mb-8 rounded font-mono text-sm">
+                <h4 class="text-red-500 font-bold mb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    RESTRICTED ACCESS WARNING
+                </h4>
+                <p class="text-gray-300">এই প্রোগ্রামে প্রচুর মানুষ আগ্রহ দেখাবে, কিন্তু আমরা শুধু তাদেরকেই নেবো যাদের <span class="text-white font-bold">প্রকৃত ডেডিকেশন</span> এবং <span class="text-white font-bold">কিছু করার তীব্র আকাঙ্ক্ষা</span> রয়েছে। নিচে দেওয়া ১০টি সাইকোলজিক্যাল এবং মাইন্ডসেট প্রশ্নের উত্তরের মাধ্যমেই আমরা আসল ট্যালেন্ট খুঁজে বের করবো।</p>
+            </div>
+
+            <form class="space-y-6 font-mono" onsubmit="event.preventDefault(); alert('Request Submitted Successfully! System Analyzing Mindset...');">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-cyberGreen text-xs mb-2">>_ LEGAL_NAME</label>
+                        <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-cyberGreen text-xs mb-2">>_ CYBER_ALIAS</label>
+                        <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="neo_hacker">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-cyberGreen text-xs mb-2">>_ SECURE_EMAIL</label>
+                    <input type="email" required class="w-full p-3 cyber-input text-sm" placeholder="agent@techvision.com">
+                </div>
+
+                <div>
+                    <label class="block text-cyberGreen text-xs mb-2">>_ CURRENT_SKILL_LEVEL</label>
+                    <select class="w-full p-3 cyber-input text-sm text-gray-400">
+                        <option value="noob">Level 0 - Absolute Beginner</option>
+                        <option value="scriptkiddie">Level 1 - Script Kiddie (Basic Knowledge)</option>
+                        <option value="intermediate">Level 2 - Intermediate (CTF Player/IT Pro)</option>
+                        <option value="pro">Level 3 - Professional Hacker</option>
+                    </select>
+                </div>
+
+                <div class="mt-12 pt-8 border-t border-gray-800">
+                    <h3 class="text-xl font-bold text-white mb-6 border-l-4 border-cyberGreen pl-3">MINDSET & CLEARANCE (10 Questions)</h3>
+                    <p class="text-gray-500 text-xs mb-6">Note: Be honest. Your psychological profile will be assessed based on these answers.</p>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">01. আপনি কেন এই প্রোগ্রামে যুক্ত হতে চান? আপনার আসল উদ্দেশ্য কী?</label>
+                            <textarea required rows="2" class="w-full p-3 cyber-input text-sm" placeholder="Enter your response..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">02. যদি একটানা ৪৮ ঘণ্টা কোনো ক্রিটিক্যাল প্রবলেম সলভ করতে হয়, আপনি কি মানসিক ও শারীরিকভাবে প্রস্তুত?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Yes/No and explain briefly...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">03. কোনো সিস্টেমে বাগ বা লুপহোল পেলে আপনার প্রথম কাজ কী হবে?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">04. আপনার জীবনের সবচেয়ে বড় ব্যর্থতা কী এবং তা থেকে আপনি কী শিখেছেন?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">05. যদি কেউ আপনাকে ব্ল্যাক হ্যাট হ্যাকিংয়ের জন্য বিশাল অঙ্কের টাকার অফার দেয়, আপনার সিদ্ধান্ত কী হবে?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">06. কোনো রুলস ব্রেক না করে আপনি কীভাবে ক্রিয়েটিভভাবে প্রবলেম সলভ করেন? (একটি উদাহরণ দিন)</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">07. আপনি কি নিজে থেকে রিসার্চ করে শিখতে অভ্যস্ত নাকি সব সময় গাইডলাইনের অপেক্ষায় থাকেন?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">08. আপনার টিমের কোনো মেম্বার যদি বারবার ভুল করে, আপনি টিমের স্বার্থে কী পদক্ষেপ নেবেন?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">09. ৫ বছর পর নিজেকে সাইবার সিকিউরিটি স্পেসে ঠিক কোন জায়গায় দেখতে চান?</label>
+                            <input type="text" required class="w-full p-3 cyber-input text-sm" placeholder="Enter your response...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs mb-2">10. এই ১০০০ জনের মধ্যে আমরা কেন আপনাকে সিলেক্ট করব? আপনার মধ্যে স্পেশাল কী আছে?</label>
+                            <textarea required rows="2" class="w-full p-3 cyber-input text-sm" placeholder="Prove your worth..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full btn-cyber mt-8 py-4 text-lg font-bold">
+                    EXECUTE_REGISTRATION
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-[#050505] border-t border-gray-900 pt-12 pb-6 relative z-10 text-center md:text-left font-mono">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <div class="text-xl font-bold text-white mb-2 tracking-widest">
+                    <span class="text-cyberGreen">/></span> TECHVISION
+                </div>
+                <p class="text-gray-600 text-xs">Securing the digital frontier of Bangladesh.</p>
+            </div>
+            
+
+            
+
+
+            <div class="text-gray-600 text-xs">
+                &copy; 2026 TechVision Syndicate. All rights reserved.
+            </div>
+
+              <div class="flex space-x-5 text-sm text-gray-400">
+                 Founder & CEO: <b style="color: #0caa66;">RAFX</b>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        /* --- 1. Initialize Scroll Animations --- */
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        /* --- 2. Typewriter Effect --- */
+        const typeText = "বাংলাদেশের সাইবার স্পেস সুরক্ষিত করতে ২ বছরের নিবিড় প্রশিক্ষণের মাধ্যমে ১৬ থেকে ২৬ বছর এর </১০০০ জনকে এলিট ইথিক্যাল হ্যাকার হিসেবে গড়ে তোলার মিশন নিয়েছি আমরা।";
+        const typeContainer = document.getElementById("typewriter-text");
+        let charIndex = 0;
+        
+        function typeWriter() {
+            if (charIndex < typeText.length) {
+                typeContainer.innerHTML += typeText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 40); // টাইপিং স্পিড
+            }
+        }
+        setTimeout(typeWriter, 500);
+
+        /* --- 3. Mobile Menu Auto-Close Fix --- */
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        /* --- 4. Dynamic Team Data Injector --- */
+        const teams = [
+            { id: "01", name: "Red Team", role: "Offensive Security & Pentesting", color: "border-red-500" },
+            { id: "02", name: "Blue Team", role: "Defensive Security & Monitoring", color: "border-blue-500" },
+            { id: "03", name: "Purple Team", role: "Integration & Tactics", color: "border-purple-500" },
+            { id: "04", name: "Cyber Intel", role: "OSINT & Threat Intelligence", color: "border-cyberGreen" },
+            { id: "05", name: "Malware Labs", role: "Reverse Engineering", color: "border-yellow-500" },
+            { id: "06", name: "Crypto Core", role: "Cryptography & Blockchain Sec", color: "border-teal-500" },
+            { id: "07", name: "Cloud Sec", role: "AWS/Azure/GCP Security", color: "border-sky-500" },
+            { id: "08", name: "IoT Hackers", role: "Hardware & Network Devices", color: "border-orange-500" },
+            { id: "09", name: "Web App Sec", role: "Bug Bounty & Web Exploits", color: "border-pink-500" },
+            { id: "10", name: "Social Eng.", role: "Human Factor & Phishing", color: "border-gray-400" }
+        ];
+
+        const teamGrid = document.getElementById('team-grid');
+        teams.forEach((team, index) => {
+            teamGrid.innerHTML += `
+                <div class="team-card p-6 relative group cursor-crosshair border-l-4 ${team.color}" data-aos="fade-up" data-aos-delay="${(index % 5) * 100}">
+                    <div class="absolute top-4 right-4 text-xs font-mono text-gray-600 group-hover:text-cyberGreen transition">
+                        [100 SEATS]
+                    </div>
+                    <div class="text-4xl font-bold text-gray-800 mb-2 font-mono group-hover:text-gray-600 transition">${team.id}</div>
+                    <h3 class="text-xl font-bold text-white mb-2">${team.name}</h3>
+                    <p class="text-sm text-gray-400 h-12">${team.role}</p>
+                    
+                    <div class="mt-6 flex items-center justify-between border-t border-gray-800 pt-4">
+                        <span class="text-xs font-mono text-cyberGreen opacity-0 group-hover:opacity-100 transition">REQUEST_ACCESS</span>
+                        <svg class="w-5 h-5 text-gray-600 group-hover:text-cyberGreen transform group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
+                </div>
+            `;
+        });
+
+        /* --- 5. Optimized Matrix Digital Rain Effect --- */
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+        const fontSize = 14;
+        let columns = canvas.width / fontSize;
+        let drops = Array.from({ length: Math.floor(columns) }).fill(1);
+
+        let lastTime = 0;
+        const fpsInterval = 1000 / 20;
+
+        function drawMatrix(currentTime) {
+            requestAnimationFrame(drawMatrix);
+            
+            const deltaTime = currentTime - lastTime;
+            
+            if (deltaTime > fpsInterval) {
+                ctx.fillStyle = "rgba(5, 5, 5, 0.05)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#00ff41";
+                ctx.font = fontSize + "px monospace";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                lastTime = currentTime - (deltaTime % fpsInterval);
+            }
+        }
+        requestAnimationFrame(drawMatrix);
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            columns = canvas.width / fontSize;
+            drops = Array.from({ length: Math.floor(columns) }).fill(1);
+        });
+    </script>
+</body>
+</html>
