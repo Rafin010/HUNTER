@@ -131,3 +131,31 @@
         acceptBtn.innerText = "✔ সম্মতি সম্পন্ন";
         acceptBtn.classList.add("bg-green-700");
     });
+
+
+    // Nav bar Scroll Effect
+     document.addEventListener('DOMContentLoaded', () => {
+        const sections = document.querySelectorAll('section'); 
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            // Find which section is currently on screen
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            // Add 'active' class to the corresponding menu item
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    });

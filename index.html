@@ -6,6 +6,7 @@
     <title>TechVision Syndicate | Mission 1000</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     
     <script>
         tailwind.config = {
@@ -153,40 +154,154 @@
 
     <canvas id="matrix-canvas"></canvas>
 
-    <nav class="fixed top-0 w-full z-50 cyber-nav transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="font-mono text-2xl font-bold text-white tracking-widest flex items-center gap-2" data-aos="fade-right">
-                <span class="text-cyberGreen">/></span> TECHVISION
-            </div>
-            
-            <div class="hidden md:flex space-x-8 items-center font-mono text-sm" data-aos="fade-left">
-                <a href="#mission" class="hover:text-cyberGreen transition">01. MISSION</a>
-                <a href="#compensation" class="hover:text-yellow-400 transition text-yellow-500">02. REWARDS</a>
-                <a href="#idcard" class="hover:text-yellow-400 transition text-yellow-500">03. ID CARD</a>
-                <a href="#squads" class="hover:text-cyberGreen transition">04. SQUADS</a>
-                <a href="#roadmap" class="hover:text-cyberGreen transition">05. ROADMAP</a>
-                <a href="#q&a" class="hover:text-cyberGreen transition">06. q&a</a>
-                <a href="#rules" class="hover:text-cyberGreen transition">RULES⚠️</a>
-                <a href="#join" class="btn-cyber">INITIALIZE</a>
-            </div>
+<style>
+    .funky-box {
+        border: 2px solid transparent;
+        transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        color: #d1d5db; /* text-gray-300 */
+    }
+    
+    /* Hover and Active State */
+    .funky-box:hover, 
+    .funky-box.active {
+        transform: translate(-4px, -4px);
+        border-color: var(--theme-color);
+        background-color: var(--theme-bg);
+        box-shadow: 4px 4px 0px var(--theme-color);
+        color: var(--theme-color);
+        font-weight: 700;
+    }
 
-            <div class="md:hidden flex items-center">
-                <button id="mobile-menu-btn" class="text-cyberGreen focus:outline-none">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
-            </div>
+    /* Mobile Funky Active State */
+    .mobile-funky-box {
+        border-left: 4px solid transparent;
+        transition: all 0.3s ease;
+    }
+    .mobile-funky-box:hover,
+    .mobile-funky-box.active {
+        border-color: var(--theme-color);
+        background-color: var(--theme-bg);
+        color: var(--theme-color);
+        padding-left: 2rem; /* Adds a funky push-right effect */
+    }
+    
+    /* nav bar border colors for debugging */
+    /* Hacker Vibe Glowing Border */
+    .hacker-border {
+        position: relative;
+    }
+    
+    .hacker-border::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        /* গ্রিন এবং সায়ান কালারের মিক্সড গ্রেডিয়েন্ট */
+        background: linear-gradient(90deg, transparent, #22c55e, #06b6d4, transparent);
+        background-size: 200% 100%;
+        box-shadow: 0px 1px 15px rgba(34, 197, 94, 0.6), 0px 1px 30px rgba(6, 182, 212, 0.4);
+        animation: cyberFlow 3s linear infinite, borderPulse 2s ease-in-out infinite;
+    }
+
+    /* গ্রেডিয়েন্ট মুভ করার অ্যানিমেশন */
+    @keyframes cyberFlow {
+        0% { background-position: 100% 0; }
+        100% { background-position: -100% 0; }
+    }
+
+    /* নিয়ন গ্লো কমা-বাড়ার অ্যানিমেশন (পালস ইফেক্ট) */
+    @keyframes borderPulse {
+        0%, 100% { opacity: 0.7; filter: brightness(1); }
+        50% { opacity: 1; filter: brightness(1.3); box-shadow: 0px 1px 20px rgba(34, 197, 94, 0.8), 0px 1px 40px rgba(6, 182, 212, 0.6); }
+    }
+
+    /* ন্যাপবারটিকে উপরে ফিক্সড করার জন্য CSS */
+.cyber-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* অন্য সব কিছুর উপরে রাখার জন্য */
+}
+
+body {
+    padding-top: 80px; /* আপনার ন্যাপবারের সাইজ অনুযায়ী এই মানটি কম-বেশি করতে পারেন */
+}
+</style>
+
+<nav class="fixed top-0 w-full z-50 cyber-nav transition-all duration-300 bg-cyberBlack/90 backdrop-blur-sm hacker-border">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="font-mono text-2xl font-bold text-white tracking-widest flex items-center gap-2" data-aos="fade-right">
+            <span class="text-cyberGreen">/></span> TECHVISION
         </div>
         
-        <div id="mobile-menu" class="hidden md:hidden bg-cyberBlack border-b border-cyberGreen/50 font-mono">
-            <a href="#mission" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800">01. MISSION</a>
-            <a href="#compensation" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800 text-yellow-500">02. REWARDS</a>
-            <a href="#squads" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800">03. SQUADS</a>
-            <a href="#roadmap" class="mobile-link block px-6 py-3 hover:bg-cyberGreen/10 border-b border-gray-800">04. ROADMAP</a>
+        <div class="hidden md:flex space-x-3 items-center font-mono text-sm" data-aos="fade-left">
+            <a href="#mission" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #22d3ee; --theme-bg: rgba(34,211,238,0.15);"> MISSION</a>
             
-            <a href="#join" class="mobile-link block px-6 py-4 text-cyberGreen font-bold hover:bg-cyberGreen/10">INITIALIZE_SYSTEM</a>
-
+            <a href="#compensation" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #facc15; --theme-bg: rgba(253,224,71,0.15);"> REWARDS</a>
+            
+            <a href="#idcard" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #e879f9; --theme-bg: rgba(232,121,249,0.15);"> ID CARD</a>
+            
+            <a href="#squads" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #fb923c; --theme-bg: rgba(251,146,60,0.15);">SQUADS</a>
+            
+            <a href="#roadmap" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #34d399; --theme-bg: rgba(52,211,153,0.15);"> ROADMAP</a>
+            
+            <a href="#q&a" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #60a5fa; --theme-bg: rgba(96,165,250,0.15);"> Q&A</a>
+            
+            <a href="#rules" class="nav-link funky-box px-3 py-2 rounded-md" style="--theme-color: #f87171; --theme-bg: rgba(248,113,113,0.15);">RULES⚠️</a>
+            
+            <a href="#join" class="btn-cyber ml-2 hover:shadow-[0_0_20px_rgba(0,255,0,0.4)] transition-all duration-300">INITIALIZE</a>
         </div>
-    </nav>
+
+        <div class="md:hidden flex items-center">
+            <button id="mobile-menu-btn" class="text-cyberGreen focus:outline-none hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_#22c55e] transition-all duration-200 p-1">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </div>
+    
+    <div id="mobile-menu" class="hidden md:hidden bg-cyberBlack border-b border-cyberGreen font-mono">
+        <a href="#mission" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300" style="--theme-color: #22d3ee; --theme-bg: rgba(34,211,238,0.1);">01. MISSION</a>
+        <a href="#compensation" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300" style="--theme-color: #facc15; --theme-bg: rgba(253,224,71,0.1);">02. REWARDS</a>
+        <a href="#idcard" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300" style="--theme-color: #e879f9; --theme-bg: rgba(232,121,249,0.1);">03. ID CARD</a>
+        <a href="#squads" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300" style="--theme-color: #fb923c; --theme-bg: rgba(251,146,60,0.1);">04. SQUADS</a>
+        <a href="#roadmap" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300" style="--theme-color: #34d399; --theme-bg: rgba(52,211,153,0.1);">05. ROADMAP</a>
+        <a href="#q&a" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300" style="--theme-color: #60a5fa; --theme-bg: rgba(96,165,250,0.1);">06. Q&A</a>
+        <a href="#rules" class="nav-link mobile-funky-box block px-6 py-3 text-gray-300 border-b border-gray-800" style="--theme-color: #f87171; --theme-bg: rgba(248,113,113,0.1);">RULES⚠️</a>
+        
+            <a href="#join" class="btn-cyber ml-2 hover:shadow-[0_0_20px_rgba(0,255,0,0.4)] transition-all duration-300">INITIALIZE</a>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sections = document.querySelectorAll('section'); 
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            // Find which section is currently on screen
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            // Add 'active' class to the corresponding menu item
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    });
+</script>
 
     <section id="mission" class="min-h-screen flex items-center pt-24 pb-12 px-6">
         <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
