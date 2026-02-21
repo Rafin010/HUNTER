@@ -133,6 +133,18 @@
             border-color: #00ff41;
             box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
         }
+
+         /* Perspective and 3D Hover Effects for Cards     */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        /* Reduced rotation angles for a more solid feel */
+        .hover\:rotate-y-6:hover {
+            transform: rotateY(6deg);
+        }
+        .hover\:rotate-x-6:hover {
+            transform: rotateX(6deg);
+        }
     </style>
 </head>
 <body class="font-sans relative">
@@ -220,33 +232,64 @@
         </div>
     </section>
 
-    <section id="compensation" class="py-16 px-6 relative z-10 bg-black">
-        <div class="max-w-7xl mx-auto bg-gradient-to-br from-[#0a1a0f] to-cyberBlack border border-cyberGreen/50 p-8 md:p-12 rounded-lg shadow-[0_0_40px_rgba(0,255,65,0.15)] relative overflow-hidden" data-aos="zoom-in">
-            <div class="absolute top-0 right-0 p-4 opacity-10">
-                <svg class="w-32 h-32 text-cyberGreen" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+<section id="compensation" class="py-20 px-6 relative z-10 bg-[#050505] overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.03)_0%,transparent_100%)]"></div>
+    <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 w-72 h-72 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto relative" data-aos="fade-up">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-900/80 border border-gray-800 shadow-[0_0_15px_rgba(16,185,129,0.1)] mb-6">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-mono text-sm tracking-widest text-emerald-400 uppercase">>_ System_Rewards</span>
             </div>
-            
-            <h2 class="text-3xl md:text-5xl font-mono font-bold text-white mb-8 border-b border-gray-800 pb-4">ELITE <span class="text-yellow-500">REWARDS & COMPENSATION</span></h2>
-            
-            <div class="grid md:grid-cols-2 gap-10">
-                <div class="border-l-4 border-yellow-500 pl-6 bg-yellow-500/5 p-4 rounded-r">
-                    <div class="text-yellow-500 font-mono text-sm mb-2">>_ POST_TRAINING_PACKAGE</div>
-                    <h3 class="text-3xl font-bold text-white mb-3">১ কোটি টাকার স্যালারি প্যাকেজ</h3>
-                    <p class="text-gray-400 leading-relaxed">
-                        প্রোগ্রাম শেষে যারা সফলভাবে বের হবে, তাদের পারফরম্যান্স ও স্কিলের ওপর ভিত্তি করে একটি হ্যান্ডসাম স্যালারি দেওয়া হবে, প্যাকেজ শুরু হবে <span class="text-yellow-500 font-bold">১ কোটি টাকা</span>। আপনার কাজ ও ডেডিকেশন নির্ধারণ করবে আপনার স্যালারি।
-                    </p>
-                </div>
-                
-                <div class="border-l-4 border-cyberGreen pl-6 bg-cyberGreen/5 p-4 rounded-r">
-                    <div class="text-cyberGreen font-mono text-sm mb-2">>_ TRAINING_ALLOWANCE</div>
-                    <h3 class="text-3xl font-bold text-white mb-3">৫০ হাজার থেকে ১ লাখ টাকা ভাতা</h3>
-                    <p class="text-gray-400 leading-relaxed">
-                        ট্রেনিং চলাকালীন সময়ে কাজের মূল্যায়ন করে প্রতিটি টিম থেকে টপ ১০ জন করে মোট <span class="text-cyberGreen font-bold">১০০ জন রিয়েল ট্যালেন্টকে</span> তাদের পারফরম্যান্স অনুযায়ী প্রতি মাসে ৫০ হাজার থেকে ১ লাখ টাকা পর্যন্ত বিশেষ ভাতা প্রদান করা হবে।
-                    </p>
-                </div>
-            </div>
+            <h2 class="text-4xl md:text-5xl font-bold text-white tracking-tight">
+                Elite <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Compensation</span>
+            </h2>
+            <div class="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-500 mx-auto mt-6 rounded-full opacity-80"></div>
         </div>
-    </section>
+
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-10">
+            
+            <div class="group relative bg-[#0a0a0a]/80 backdrop-blur-sm border border-gray-800 hover:border-amber-500/50 rounded-2xl p-8 transition-all duration-500 hover:shadow-[0_0_40px_rgba(245,158,11,0.15)] hover:-translate-y-2">
+                <div class="flex items-center justify-between mb-8 border-b border-gray-800/60 pb-4">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    <span class="font-mono text-xs text-amber-500/60">~/exec/post_training.sh</span>
+                </div>
+
+                <div class="relative z-10">
+                    <h3 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">১ কোটি টাকার <br/><span class="text-amber-500">স্যালারি প্যাকেজ</span></h3>
+                    <p class="text-gray-400 leading-relaxed font-light text-lg">
+                        প্রোগ্রাম শেষে সফলভাবে উত্তীর্ণদের স্কিল ও পারফরম্যান্সের ওপর ভিত্তি করে একটি প্রিমিয়াম স্যালারি প্যাকেজ অফার করা হবে, যার শুরু হবে <strong class="text-amber-400 font-medium">১ কোটি টাকা</strong> থেকে। আপনার ডেডিকেশন ও এক্সিকিউশনই নির্ধারণ করবে আপনার চূড়ান্ত মূল্যায়ন।
+                    </p>
+                </div>
+            </div>
+
+            <div class="group relative bg-[#0a0a0a]/80 backdrop-blur-sm border border-gray-800 hover:border-emerald-500/50 rounded-2xl p-8 transition-all duration-500 hover:shadow-[0_0_40px_rgba(16,185,129,0.15)] hover:-translate-y-2">
+                <div class="flex items-center justify-between mb-8 border-b border-gray-800/60 pb-4">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    <span class="font-mono text-xs text-emerald-500/60">~/exec/training_phase.sh</span>
+                </div>
+
+                <div class="relative z-10">
+                    <h3 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">৫০ হাজার - ১ লাখ <br/><span class="text-emerald-400">টাকা ভাতা</span></h3>
+                    <p class="text-gray-400 leading-relaxed font-light text-lg">
+                        ট্রেনিং চলাকালীন কাজের মূল্যায়নের ভিত্তিতে প্রতিটি টিম থেকে টপ ১০ জন করে মোট <strong class="text-emerald-400 font-medium">১০০ জন রিয়েল ট্যালেন্টকে</strong> তাদের পারফরম্যান্স অনুযায়ী প্রতি মাসে ৫০ হাজার থেকে ১ লাখ টাকা পর্যন্ত বিশেষ ভাতা প্রদান করা হবে।
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <section id="idcard" class="py-24 px-6 relative z-10 bg-[#030303] overflow-hidden">
     
@@ -414,18 +457,7 @@
         </div>
     </div>
     
-    <style>
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        /* Reduced rotation angles for a more solid feel */
-        .hover\:rotate-y-6:hover {
-            transform: rotateY(6deg);
-        }
-        .hover\:rotate-x-6:hover {
-            transform: rotateX(6deg);
-        }
-    </style>
+
 </section>
 
 
@@ -746,20 +778,7 @@
     </div>
 </section>
 
-<script>
-    const agreeCheck = document.getElementById("agreeCheck");
-    const acceptBtn = document.getElementById("acceptBtn");
-    const successMsg = document.getElementById("successMsg");
 
-    agreeCheck.addEventListener("change", function () {
-        acceptBtn.disabled = !this.checked;
-    });
-
-    acceptBtn.addEventListener("click", function () {
-        successMsg.classList.remove("hidden");
-        acceptBtn.innerText = "✔ সম্মতি সম্পন্ন";
-        acceptBtn.classList.add("bg-green-700");
-    });
 </script>  
 
     <section id="join" class="py-24 px-6 relative z-10 bg-gradient-to-t from-[#050505] to-cyberBlack">
@@ -867,10 +886,6 @@
                 </div>
                 <p class="text-gray-600 text-xs">Securing the digital frontier of Bangladesh.</p>
             </div>
-            
-
-            
-
 
             <div class="text-gray-600 text-xs">
                 &copy; 2026 TechVision Syndicate. All rights reserved.
@@ -884,123 +899,7 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <script>
-        /* --- 1. Initialize Scroll Animations --- */
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100
-        });
-
-        /* --- 2. Typewriter Effect --- */
-        const typeText = "বাংলাদেশের সাইবার স্পেস সুরক্ষিত করতে ২ বছরের নিবিড় প্রশিক্ষণের মাধ্যমে ১৬ থেকে ২৬ বছর এর </১০০০ জনকে এলিট ইথিক্যাল হ্যাকার হিসেবে গড়ে তোলার মিশন নিয়েছি আমরা।";
-        const typeContainer = document.getElementById("typewriter-text");
-        let charIndex = 0;
-        
-        function typeWriter() {
-            if (charIndex < typeText.length) {
-                typeContainer.innerHTML += typeText.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeWriter, 40); // টাইপিং স্পিড
-            }
-        }
-        setTimeout(typeWriter, 500);
-
-        /* --- 3. Mobile Menu Auto-Close Fix --- */
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-        
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menu.classList.add('hidden');
-            });
-        });
-
-        /* --- 4. Dynamic Team Data Injector --- */
-        const teams = [
-            { id: "01", name: "Red Team", role: "Offensive Security & Pentesting", color: "border-red-500" },
-            { id: "02", name: "Blue Team", role: "Defensive Security & Monitoring", color: "border-blue-500" },
-            { id: "03", name: "Purple Team", role: "Integration & Tactics", color: "border-purple-500" },
-            { id: "04", name: "Cyber Intel", role: "OSINT & Threat Intelligence", color: "border-cyberGreen" },
-            { id: "05", name: "Malware Labs", role: "Reverse Engineering", color: "border-yellow-500" },
-            { id: "06", name: "Crypto Core", role: "Cryptography & Blockchain Sec", color: "border-teal-500" },
-            { id: "07", name: "Cloud Sec", role: "AWS/Azure/GCP Security", color: "border-sky-500" },
-            { id: "08", name: "IoT Hackers", role: "Hardware & Network Devices", color: "border-orange-500" },
-            { id: "09", name: "Web App Sec", role: "Bug Bounty & Web Exploits", color: "border-pink-500" },
-            { id: "10", name: "Social Eng.", role: "Human Factor & Phishing", color: "border-gray-400" }
-        ];
-
-        const teamGrid = document.getElementById('team-grid');
-        teams.forEach((team, index) => {
-            teamGrid.innerHTML += `
-                <div class="team-card p-6 relative group cursor-crosshair border-l-4 ${team.color}" data-aos="fade-up" data-aos-delay="${(index % 5) * 100}">
-                    <div class="absolute top-4 right-4 text-xs font-mono text-gray-600 group-hover:text-cyberGreen transition">
-                        [100 SEATS]
-                    </div>
-                    <div class="text-4xl font-bold text-gray-800 mb-2 font-mono group-hover:text-gray-600 transition">${team.id}</div>
-                    <h3 class="text-xl font-bold text-white mb-2">${team.name}</h3>
-                    <p class="text-sm text-gray-400 h-12">${team.role}</p>
-                    
-                    <div class="mt-6 flex items-center justify-between border-t border-gray-800 pt-4">
-                        <span class="text-xs font-mono text-cyberGreen opacity-0 group-hover:opacity-100 transition">REQUEST_ACCESS</span>
-                        <svg class="w-5 h-5 text-gray-600 group-hover:text-cyberGreen transform group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </div>
-                </div>
-            `;
-        });
-
-        /* --- 5. Optimized Matrix Digital Rain Effect --- */
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
-        const fontSize = 14;
-        let columns = canvas.width / fontSize;
-        let drops = Array.from({ length: Math.floor(columns) }).fill(1);
-
-        let lastTime = 0;
-        const fpsInterval = 1000 / 20;
-
-        function drawMatrix(currentTime) {
-            requestAnimationFrame(drawMatrix);
-            
-            const deltaTime = currentTime - lastTime;
-            
-            if (deltaTime > fpsInterval) {
-                ctx.fillStyle = "rgba(5, 5, 5, 0.05)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "#00ff41";
-                ctx.font = fontSize + "px monospace";
-
-                for (let i = 0; i < drops.length; i++) {
-                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-                lastTime = currentTime - (deltaTime % fpsInterval);
-            }
-        }
-        requestAnimationFrame(drawMatrix);
-
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            columns = canvas.width / fontSize;
-            drops = Array.from({ length: Math.floor(columns) }).fill(1);
-        });
-    </script>
+   
+    <script src="script.js"></script>
 </body>
 </html>
